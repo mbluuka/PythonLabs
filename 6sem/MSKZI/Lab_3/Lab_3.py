@@ -10,8 +10,10 @@ import random
 import json
 import time
 
+
 def get_random_digit():
     return random.randint(0, 255)
+
 
 def write_files_with_binary_mode(filename: str, list_of_bytes: list):
     with open(f"{filename}", "wb") as write_file:
@@ -23,12 +25,14 @@ def read_files_with_binary_mode(filename: str):
         binary = read_file.read()
     return [i for i in binary]
 
+
 def generate_key_for_permutation(length_list: int):
     key = [i for i in range(length_list)]
     random.shuffle(key)
     with open('keys/permutation_key.txt', 'w') as write_file:
         for i in key:
             write_file.write(f"{i} ")
+
 
 def generate_key_for_substitution(list_of_bytes: list):
     helper_list = []
@@ -57,12 +61,15 @@ def generate_key_for_substitution(list_of_bytes: list):
     with open('keys/key_dict_2.json', 'w') as json_write_file:
         json.dump(key_dict_2, json_write_file, indent=3)
 
+
 def generate_key_for_gamming(list_of_bytes: list):
     key = [get_random_digit() for i in list_of_bytes]
     with open("keys/gamming_key.txt", "w") as write_file:
         for i in key:
             write_file.write(f"{i} ")
 
+
+# Шифрование методом перестановкой
 def permutation_enc(list_of_bytes: list):
     with open("keys/permutation_key.txt", "r") as read_file:
         tmp = read_file.read()
@@ -79,12 +86,16 @@ def permutation_enc(list_of_bytes: list):
         stop += len(key)
     return list_enc
 
+
+# Шифрование методом подстановкой
 def substitution_enc(list_of_bytes: list):
     with open('keys/key_dict_1.json', "r") as json_read_file:
         key_dict_1 = json.load(json_read_file)
     result_list = [int(key_dict_1[str(i)]) for i in list_of_bytes]
     return result_list
 
+
+# Шифрование методом гаммирования
 def gamming_enc(list_of_bytes: list):
     with open ("keys/gamming_key.txt", "r") as read_file:
         tmp = read_file.read()
@@ -92,12 +103,16 @@ def gamming_enc(list_of_bytes: list):
     result_list = [(list_of_bytes[i] ^ int(key_gamming[i])) for i in range(len(list_of_bytes))]
     return result_list
 
+
+# Дешифрование методом подстановкой
 def substitution_dec(list_of_bytes: list):
     with open("keys/key_dict_2.json", "r") as json_read_file:
         key_dict_2 = json.load(json_read_file)
     result_list = [int(key_dict_2[str(i)]) for i in list_of_bytes]
     return result_list
 
+
+# Дешифрование методом перестановкой
 def permutation_dec(list_enc: list):
     with open("keys/permutation_key.txt", "r") as read_files:
         tmp = read_files.read()
@@ -114,6 +129,8 @@ def permutation_dec(list_enc: list):
         stop += len(key)
     return list_dec
 
+
+# Дешифрование методом гаммирования
 def gamming_dec(list_of_bytes: list):
     with open ("keys/gamming_key.txt", "r") as read_file:
         tmp = read_file.read()
@@ -122,7 +139,7 @@ def gamming_dec(list_of_bytes: list):
     return result_list
 
 
-def executor():
+def main():
     filename  = input("write filename for cryptography action: ")
     list_of_bytes_temp = read_files_with_binary_mode(filename)
     list_of_bytes = []
@@ -189,4 +206,6 @@ def executor():
     write_files_with_binary_mode(f"dec/{filename}", list_of_bytes_dec)
     print(f"time decryption: {stop_dec}")
 
-executor()
+
+if __name__ == "main":
+    main()
