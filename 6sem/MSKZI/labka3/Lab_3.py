@@ -140,7 +140,7 @@ def gamming_dec(list_of_bytes: list):
 
 
 def main():
-    filename  = input("write filename for cryptography action: ")
+    filename = input("write filename for cryptography action: ")
     list_of_bytes_temp = read_files_with_binary_mode(filename)
     list_of_bytes = []
     length_block_data = 16
@@ -207,5 +207,5 @@ def main():
     print(f"time decryption: {stop_dec}")
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
