@@ -14,4 +14,4 @@ with open('D:/Учеба/4 курс/7 семестр/ПАСЗИ/Sertificate.txt'
     tmp = read_file.read()
 
 if tmp == str(rock):
-    print('hui')
+    print('okrkr')

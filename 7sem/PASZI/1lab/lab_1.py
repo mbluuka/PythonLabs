@@ -46,31 +46,38 @@ def read_json_file(filename: str):
 dict_of_user_information = read_json_file('db.json')
 dict_of_user_information['ADMIN'] = '1234'
 
+
 def write_json_file(filename: str):
     global dict_of_user_information
     with open(f'{filename}', 'w') as write_file:
         json.dump(dict_of_user_information, write_file)
 
+
 write_json_file('db.json')
+
 
 def get_information(current_window):
     global dict_of_user_information
     dict_of_user_information = read_json_file('db.json')
     label_information = tk.Label(current_window, text=f'{dict_of_user_information}').pack()
 
+
 def register_admin(lst: list):
     global dict_of_user_information
     dict_of_user_information[lst[0].get()] = lst[1].get()
     write_json_file('db.json')
+
 
 def register_user(lst: list):
     global dict_of_user_information
     dict_of_user_information[lst[0]] = lst[1].get()
     write_json_file('db.json')
 
+
 def new_accounting(current_window):
     current_window.destroy()
     main()
+
 
 def accounting(lst: list):
     global dict_of_user_information
@@ -84,11 +91,11 @@ def accounting(lst: list):
     if login in dict_of_user_information.keys():
         if login == "ADMIN" and password == '1234':
             lst[2].destroy()
-            messagebox.showinfo('ROCK!', 'Rock!!!!')
+            messagebox.showinfo('WELCOME!', 'Добро пожаловать, начальник!')
             window_in_system_admin = tk.Tk()
-            window_in_system_admin.geometry('300x500')
+            window_in_system_admin.geometry('300x300')
             window_in_system_admin.resizable(False, False)
-            window_in_system_admin.title("ADMIN")
+            window_in_system_admin.title("Админка")
             label_admin_new_login = tk.Label(window_in_system_admin, text="Введите новый логин пользователя")
             label_admin_new_login.pack()
             entry_admin_new_login = tk.Entry(window_in_system_admin)
@@ -97,8 +104,9 @@ def accounting(lst: list):
             label_admin_new_password.pack()
             entry_admin_new_password = tk.Entry(window_in_system_admin, show="*")
             entry_admin_new_password.pack()
-            button_admin_register = tk.Button(window_in_system_admin, text="Send Data",
-                                              command=partial(register_admin, [entry_admin_new_login, entry_admin_new_password]))
+            button_admin_register = tk.Button(window_in_system_admin, text="Отправить в БД",
+                                              command=partial(register_admin,
+                                                              [entry_admin_new_login, entry_admin_new_password]))
             button_admin_register.pack()
             button_destroy = tk.Button(window_in_system_admin, text="Закончить работу!",
                                        command=window_in_system_admin.destroy)
@@ -106,18 +114,18 @@ def accounting(lst: list):
             button_register = tk.Button(window_in_system_admin, text="Авторизоваться заново",
                                         command=partial(new_accounting, window_in_system_admin))
             button_register.pack()
-            button_get_information_about_users = tk.Button(window_in_system_admin, text="get_information",
+            button_get_information_about_users = tk.Button(window_in_system_admin, text="Запрос в БД",
                                                            command=partial(get_information, window_in_system_admin))
             button_get_information_about_users.pack()
 
             window_in_system_admin.mainloop()
         else:
             lst[2].destroy()
-            messagebox.showinfo(f'USER', f'login: {login}, password: {password}')
+            messagebox.showinfo(f'Пользователь', f'Логин: {login}, Пароль: {password}')
             window_in_system_user = tk.Tk()
             window_in_system_user.geometry("500x500")
             window_in_system_user.resizable(False, False)
-            window_in_system_user.title("user")
+            window_in_system_user.title("Пользователька")
             label_user_new_login = tk.Label(window_in_system_user,
                                             text="Если есть желание, поменяйте свои данные для входа в систему")
             label_user_new_login.pack()
@@ -125,7 +133,7 @@ def accounting(lst: list):
             label_user_new_password.pack()
             entry_user_new_password = tk.Entry(window_in_system_user, show="*")
             entry_user_new_password.pack()
-            button_register_user = tk.Button(window_in_system_user, text="Send Data",
+            button_register_user = tk.Button(window_in_system_user, text="Отправить данные",
                                              command=partial(register_user, [login, entry_user_new_password]))
             button_register_user.pack()
             button_destroy = tk.Button(window_in_system_user, text="Закончить работу!",
@@ -138,20 +146,20 @@ def accounting(lst: list):
 
     else:
         lst[2].destroy()
-        messagebox.showinfo('Access denied!', 'НЕ РОК')
+        messagebox.showinfo('Доступ запрещен', 'НЕ ОКЕЙ :(')
 
 
 def main():
     window = tk.Tk()
-    window.title("Accounting")
+    window.title("Регистрация")
     window.geometry('200x200')
     window.resizable(False, False)
-    label_login = tk.Label(text='login: ')
-    label = tk.Label(text='Надо авторизоваться!')
-    label_password = tk.Label(text='password: ')
+    label_login = tk.Label(text='Логин: ')
+    label = tk.Label(text='Авторизуйся!!!')
+    label_password = tk.Label(text='Пароль: ')
     entry_login = tk.Entry()
     entry_password = tk.Entry(show='*')
-    authorize_button = tk.Button(window, text="Authorization",
+    authorize_button = tk.Button(window, text="Авторизация",
                                  command=partial(accounting, [entry_login, entry_password, window]))
     label.pack()
     label_login.pack()
@@ -159,8 +167,9 @@ def main():
     label_password.pack()
     entry_password.pack()
     authorize_button.pack()
-    certificate_button = tk.Button(text="check_certificate", command=partial(check_certificate, window))
+    certificate_button = tk.Button(text="Проверка сертификата", command=partial(check_certificate, window))
     certificate_button.pack()
     window.mainloop()
+
 
 main()
